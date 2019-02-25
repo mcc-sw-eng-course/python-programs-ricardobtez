@@ -10,12 +10,10 @@ from enum import Enum, auto
 class sdError(Enum):
     E_OK = auto()
     E_NOT_VALID_FILE = auto()
+    E_INVALID_DATA_IN_FILE = auto()
     E_NOT_WRITE_PERMISSION = auto()
     E_NOT_READ_PERMISSION = auto()
     E_GENERIC_ERROR = auto()
-
-    def __str__(self):
-        return '{}'.format(self.name)
 
 # Class definition
 class sortCSV:
@@ -27,19 +25,27 @@ class sortCSV:
 
     # Set input data method definition
     def set_input_data(self, file_path_name):
-        returnValue = sdError.E_GENERIC_ERROR
+        returnValue = sdError.E_OK
         if (isinstance(file_path_name, str)):
-            try:
-                fileHdlr = None
-                if (path.exists(file_path_name)):
+            fileHdlr = None
+            if (path.exists(file_path_name)):
+                try:
                     fileHdlr = open(file_path_name, 'r').close()
+                except:
+                    returnValue = sdError.E_NOT_READ_PERMISSION
+
+                if (sdError.E_OK == returnValue):
+                    pointsCount = file_path_name.count('.')
+                    # Checking filename format
+                    if (1 < pointsCount):
+                        returnValue = sdError.E_NOT_VALID_FILE
+                    if (file_path_name[-4:] != '.csv'):
+                        returnValue = sdError.E_NOT_VALID_FILE
                     self.inputFile = file_path_name
-                returnValue = sdError.E_OK
-            except:
-                print('Some exception raised')
+            else:
+                returnValue = sdError.E_NOT_VALID_FILE              
         else:
             raise ValueError('No valid input file_path_name')
-
         return returnValue
 
     # Set output data method definition
