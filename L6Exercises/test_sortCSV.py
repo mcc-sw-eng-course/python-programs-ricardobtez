@@ -42,6 +42,15 @@ class test_sortCSV(unittest.TestCase):
         remove(NEW_FOLDER_PATH +'/'+VALID_INPUT_FILENAME)
         rmdir(NEW_FOLDER_PATH)
 
+    def test_validOutputFile_SetOutputData(self):
+        self.assertEqual(sdError.E_OK, self.tmpClass.set_output_data(VALID_OUTPUT_FILENAME))
+        remove(VALID_OUTPUT_FILENAME)
+    def test_validOutPutFile_SetOutputData_OtherPath(self):
+        if (not path.exists(NEW_FOLDER_PATH)):
+            makedirs(NEW_FOLDER_PATH)
+        self.assertEqual(sdError.E_OK, self.tmpClass.set_output_data(NEW_FOLDER_PATH + '/' + VALID_OUTPUT_FILENAME))
+        remove(NEW_FOLDER_PATH+'/'+VALID_OUTPUT_FILENAME)
+        rmdir(NEW_FOLDER_PATH)
     # Negative testing input file
     # def test_invalidInputFile_SetInputData(self):
     #     inputFileHdlr = open(INVALID_INPUT_FILENAME,'w')

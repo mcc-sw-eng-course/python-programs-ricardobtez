@@ -20,7 +20,7 @@ class sortCSV:
     # Default initializer
     def __init__(self):
         self.inputFile = None
-        self.outpuFile = None
+        self.outputFile = None
         self.mergeMethod = None  # To be used later
 
     # Set input data method definition
@@ -41,6 +41,8 @@ class sortCSV:
                         returnValue = sdError.E_NOT_VALID_FILE
                     if (file_path_name[-4:] != '.csv'):
                         returnValue = sdError.E_NOT_VALID_FILE
+
+                if (sdError.E_OK == returnValue):
                     self.inputFile = file_path_name
             else:
                 returnValue = sdError.E_NOT_VALID_FILE              
@@ -50,7 +52,28 @@ class sortCSV:
 
     # Set output data method definition
     def set_output_data(self, file_path_name):
-        pass
+        returnValue = sdError.E_OK
+
+        if (isinstance(file_path_name, str)):
+            fileHdlr = None
+            try:
+                fileHdlr = open(file_path_name, 'w').close()
+            except:
+                returnValue = sdError.E_NOT_WRITE_PERMISSION
+
+            if (sdError.E_OK == returnValue):
+                pointsCount = file_path_name.count('.')
+                # Checking filename format
+                if (1 < pointsCount):
+                    returnValue = sdError.E_NOT_VALID_FILE
+                if (file_path_name[-4:] != '.csv'):
+                    returnValue = sdError.E_NOT_VALID_FILE
+
+            if (sdError.E_OK == returnValue):
+                self.outputFile = file_path_name
+        else:
+            raise ValueError('No valid output file_path_name')
+        return returnValue
 
     # Perform merge sort in the input file and writing into the
     # output file described
