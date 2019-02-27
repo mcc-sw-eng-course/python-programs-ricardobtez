@@ -77,7 +77,32 @@ class test_sortCSV(unittest.TestCase):
         chmod(INVALID_PERMISSIONS_FILE, 0o777)
         remove(INVALID_PERMISSIONS_FILE)
 
-
+    # Small size file merge sort
+    def test_smallSizeFile_mergeSort(self):
+        inputFileHdlr = open(VALID_INPUT_FILENAME, 'w')
+        inputFileHdlr.write('10,9,8,7,6,5,4,3,2,1,0')
+        inputFileHdlr.close()
+        self.tmpClass.set_input_data(VALID_INPUT_FILENAME)
+        self.tmpClass.set_output_data(VALID_OUTPUT_FILENAME)
+        self.tmpClass.execute_merge_sort()
+        outputFileHdlr = open(VALID_OUTPUT_FILENAME, 'r')
+        outRead = outputFileHdlr.read().strp()  # Removes the posible trailing space
+        self.assertEqual('0,1,2,3,4,5,6,7,8,9,10', outRead)
+    def test_medioumSizeFile_mergeSort(self):
+        data = []
+        for i in range(5000):
+            if(0 == (i%2)):
+                data.insert(0,i)
+            else:
+                data.insert(len(data)-1, i)
+        inputFileHdlr = open(VALID_INPUT_FILENAME, 'w')
+        inputFileHdlr.write(','.join(data))
+        inputFileHdlr.close()
+        self.tmpClass.set_input_data(VALID_INPUT_FILENAME)
+        self.tmpClass.set_output_data(VALID_OUTPUT_FILENAME)
+        outputFileHdlr = open(VALID_OUTPUT_FILENAME,'r')
+        outRead = outputFileHdlr.read()
+        self.assertEqual(outread, ','.join(data.sort()))
 
 if __name__ == '__main__':
     unittest.main()

@@ -10,6 +10,7 @@ from enum import Enum, auto
 class sdError(Enum):
     E_OK = auto()
     E_NOT_VALID_FILE = auto()
+    E_NOT_FILES_DEFINED = auto()
     E_INVALID_DATA_IN_FILE = auto()
     E_NOT_WRITE_PERMISSION = auto()
     E_NOT_READ_PERMISSION = auto()
@@ -77,5 +78,49 @@ class sortCSV:
 
     # Perform merge sort in the input file and writing into the
     # output file described
+    # Will return a sdError value as a result of the operation
     def execute_merge_sort(self):
-        pass
+        errorCode = sdError.E_NOT_FILES_DEFINED
+        finelResult = []
+        if(None != self.inputFile and
+           None != self.outputFile):
+            dataInput = open(self.inputFile, 'r').read().close()
+            finalResult = self.__recursiveMergeSort(dataInput.split(','))
+            errorCode = sdError.E_OK
+        return errorCode
+
+    # Will receive a list of X size and will return the sorted list
+    # If an error occurs at any moment, will throw an exception
+    def __recursiveMergeSort(self, array):
+        if(len(array) > 0):
+            mid = len(array) // 2
+            leftArray = array[:mid]
+            rightArray = array[mid:]
+
+            self.__recursiveMergeSort(leftArray)
+            self.__recursiveMergeSort(rightArray)
+
+            i = 0
+            j = 0
+            k = 0
+            # Copy data to temp arrays leftArray and rightArray
+            while (i < len(leftArray) and j < len(rightArray)):
+                if (leftArray[i] < rightArray[i]):
+                    array[k] = leftArray[i]
+                    i += 1
+                else:
+                    array[k] = rightArray[j]
+                    j += 1
+                k += 1
+            # Checking that all the elements are ncluded
+            while (i < len(leftArray)):
+                array[k] = leftArray[i]
+                i += 1
+                k += 1
+            while(j < len(rightArray)):
+                array[k] = rightArray[j]
+                j += 1
+                k += 1
+
+
+
