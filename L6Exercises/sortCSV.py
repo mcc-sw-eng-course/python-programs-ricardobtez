@@ -84,43 +84,81 @@ class sortCSV:
         finelResult = []
         if(None != self.inputFile and
            None != self.outputFile):
-            dataInput = open(self.inputFile, 'r').read().close()
-            finalResult = self.__recursiveMergeSort(dataInput.split(','))
+            inputFileHdlr = open(self.inputFile, 'r')
+            dataInput = inputFileHdlr.read()
+            inputFileHdlr.close()
+            finalResult = self.__iterativeMergeSort(dataInput.split(','))
             errorCode = sdError.E_OK
         return errorCode
 
     # Will receive a list of X size and will return the sorted list
     # If an error occurs at any moment, will throw an exception
-    def __recursiveMergeSort(self, array):
+    def __iterativeMergeSort(self, array):
         if(len(array) > 0):
-            mid = len(array) // 2
-            leftArray = array[:mid]
-            rightArray = array[mid:]
-
-            self.__recursiveMergeSort(leftArray)
-            self.__recursiveMergeSort(rightArray)
-
-            i = 0
-            j = 0
-            k = 0
-            # Copy data to temp arrays leftArray and rightArray
-            while (i < len(leftArray) and j < len(rightArray)):
-                if (leftArray[i] < rightArray[i]):
-                    array[k] = leftArray[i]
-                    i += 1
-                else:
-                    array[k] = rightArray[j]
-                    j += 1
-                k += 1
-            # Checking that all the elements are ncluded
-            while (i < len(leftArray)):
-                array[k] = leftArray[i]
-                i += 1
-                k += 1
-            while(j < len(rightArray)):
-                array[k] = rightArray[j]
+            current_size = 1
+      
+        # Outer loop for traversing Each  
+        # sub array of current_size 
+        while current_size < len(array) - 1: 
+              
+            left = 0
+            # Inner loop for merge call  
+            # in a sub array 
+            # Each complete Iteration sorts 
+            # the iterating sub array 
+            while left < len(array)-1: 
+                  
+                # mid index = left index of  
+                # sub array + current sub  
+                # array size - 1 
+                mid = left + current_size - 1
+                  
+                # (False result,True result) 
+                # [Condition] Can use current_size 
+                # if 2 * current_size < len(a)-1 
+                # else len(a)-1 
+                right = ((2 * current_size + left - 1, len(array) - 1)
+                    [2 * current_size  + left - 1 > len(array)-1]) 
+                                
+                # Merge call for each sub array 
+                self.__merge(array, left, mid, right) 
+                left = left + current_size*2
+                  
+            # Increasing sub array size by 
+            # multiple of 2 
+            current_size = 2 * current_size
+    def __merge(self, array, left, mid, right):
+        print('Array:{}, left:{}, mid:{}, right{}'.format(array, left, mid, right))
+        n1 = mid - left +1
+        n2 = right - mid 
+        L = [0] * n1
+        R = [0] * n2 
+        for i in range(0, n1): 
+            L[i] = array[left + i] 
+        for i in range(0, n2): 
+            R[i] = array[mid + i + 1] 
+      
+        i = 0
+        j = 0
+        k = left 
+        while i < n1 and j < n2: 
+            if L[i] > R[j]: 
+                array[k] = R[j] 
                 j += 1
-                k += 1
+            else: 
+                array[k] = L[i] 
+                i += 1
+            k += 1
+      
+        while i < n1: 
+            array[k] = L[i] 
+            i += 1
+            k += 1
+      
+        while j < n2: 
+            array[k] = R[j] 
+            j += 1
+            k += 1
 
 
 
