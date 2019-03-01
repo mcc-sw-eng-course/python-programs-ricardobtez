@@ -129,16 +129,3 @@ class sortCSV:
                 j+=1
                 k+=1
 
-
-if __name__ == '__main__':
-    tmpClass = sortCSV()
-    inputFileHdlr = open('test.csv', 'w')
-    inputFileHdlr.write('10,9,8,7,6,5,4,3,2,1,0')
-    inputFileHdlr.close()
-    tmpClass.set_input_data('test.csv')
-    tmpClass.set_output_data('out.csv')
-    tmpClass.execute_merge_sort()
-    outputFileHdlr = open('out.csv', 'r')
-    outRead = outputFileHdlr.read()
-    outputFileHdlr.close()
-    print(outRead)

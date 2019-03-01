@@ -89,23 +89,7 @@ class test_sortCSV(unittest.TestCase):
         outRead = outputFileHdlr.read()
         outputFileHdlr.close()
         type(outRead)
-        self.assertEqual('0,1,2,3,4,5,6,7,8,9,10', outRead)
-    # def test_medioumSizeFile_mergeSort(self):
-    #     data = []
-    #     for i in range(5000):
-    #         if(0 == (i%2)):
-    #             data.insert(0,i)
-    #         else:
-    #             data.insert(len(data)-1, i)
-    #     inputFileHdlr = open(VALID_INPUT_FILENAME, 'w')
-    #     inputFileHdlr.write(','.join([str(x) for x in data]))
-    #     inputFileHdlr.close()
-    #     self.tmpClass.set_input_data(VALID_INPUT_FILENAME)
-    #     self.tmpClass.set_output_data(VALID_OUTPUT_FILENAME)
-    #     outputFileHdlr = open(VALID_OUTPUT_FILENAME,'r')
-    #     outRead = outputFileHdlr.read()
-    #     outputFileHdlr.close()
-    #     self.assertEqual(outRead, ','.join(data.sort()))
+        self.assertEqual('0,1,10,2,3,4,5,6,7,8,9', outRead)
 
 if __name__ == '__main__':
     unittest.main()
