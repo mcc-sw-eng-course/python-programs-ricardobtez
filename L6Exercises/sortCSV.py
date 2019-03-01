@@ -87,78 +87,58 @@ class sortCSV:
             inputFileHdlr = open(self.inputFile, 'r')
             dataInput = inputFileHdlr.read()
             inputFileHdlr.close()
-            finalResult = self.__iterativeMergeSort(dataInput.split(','))
+            lista = dataInput.split(',')
+            self.__recursiveMergeSort(lista)
+            outputFileHdlr = open(self.outputFile, 'w')
+            outputFileHdlr.write(','.join(lista))
+            outputFileHdlr.close()
             errorCode = sdError.E_OK
         return errorCode
 
     # Will receive a list of X size and will return the sorted list
     # If an error occurs at any moment, will throw an exception
-    def __iterativeMergeSort(self, array):
-        if(len(array) > 0):
-            current_size = 1
+    def __recursiveMergeSort(self, arr):
+        if len(arr) >1: 
+            mid = len(arr)//2
+            L = arr[:mid]  
+            R = arr[mid:]
       
-        # Outer loop for traversing Each  
-        # sub array of current_size 
-        while current_size < len(array) - 1: 
+            self.__recursiveMergeSort(L) 
+            self.__recursiveMergeSort(R)
+      
+            i = j = k = 0
               
-            left = 0
-            # Inner loop for merge call  
-            # in a sub array 
-            # Each complete Iteration sorts 
-            # the iterating sub array 
-            while left < len(array)-1: 
-                  
-                # mid index = left index of  
-                # sub array + current sub  
-                # array size - 1 
-                mid = left + current_size - 1
-                  
-                # (False result,True result) 
-                # [Condition] Can use current_size 
-                # if 2 * current_size < len(a)-1 
-                # else len(a)-1 
-                right = ((2 * current_size + left - 1, len(array) - 1)
-                    [2 * current_size  + left - 1 > len(array)-1]) 
-                                
-                # Merge call for each sub array 
-                self.__merge(array, left, mid, right) 
-                left = left + current_size*2
-                  
-            # Increasing sub array size by 
-            # multiple of 2 
-            current_size = 2 * current_size
-    def __merge(self, array, left, mid, right):
-        print('Array:{}, left:{}, mid:{}, right{}'.format(array, left, mid, right))
-        n1 = mid - left +1
-        n2 = right - mid 
-        L = [0] * n1
-        R = [0] * n2 
-        for i in range(0, n1): 
-            L[i] = array[left + i] 
-        for i in range(0, n2): 
-            R[i] = array[mid + i + 1] 
-      
-        i = 0
-        j = 0
-        k = left 
-        while i < n1 and j < n2: 
-            if L[i] > R[j]: 
-                array[k] = R[j] 
-                j += 1
-            else: 
-                array[k] = L[i] 
-                i += 1
-            k += 1
-      
-        while i < n1: 
-            array[k] = L[i] 
-            i += 1
-            k += 1
-      
-        while j < n2: 
-            array[k] = R[j] 
-            j += 1
-            k += 1
+            # Copy data to temp arrays L[] and R[] 
+            while i < len(L) and j < len(R): 
+                if L[i] < R[j]: 
+                    arr[k] = L[i] 
+                    i+=1
+                else: 
+                    arr[k] = R[j] 
+                    j+=1
+                k+=1
+              
+            # Checking if any element was left 
+            while i < len(L): 
+                arr[k] = L[i] 
+                i+=1
+                k+=1
+              
+            while j < len(R): 
+                arr[k] = R[j] 
+                j+=1
+                k+=1
 
 
-
+if __name__ == '__main__':
+    tmpClass = sortCSV()
+    inputFileHdlr = open('test.csv', 'w')
+    inputFileHdlr.write('10,9,8,7,6,5,4,3,2,1,0')
+    inputFileHdlr.close()
+    tmpClass.set_input_data('test.csv')
+    tmpClass.set_output_data('out.csv')
+    tmpClass.execute_merge_sort()
+    outputFileHdlr = open('out.csv', 'r')
+    outRead = outputFileHdlr.read()
+    outputFileHdlr.close()
+    print(outRead)
