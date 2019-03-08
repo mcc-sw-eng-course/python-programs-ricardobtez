@@ -95,6 +95,24 @@ class sortCSV:
             errorCode = sdError.E_OK
         return errorCode
 
+    # Perform heap sort in the input file and writing into the
+    # output file described.
+    # Will return a sdError value as a result of the operation.
+    def execute_heap_sort(self):
+        pass
+
+    # Perform quick sort in the input file and writing into the
+    # output file described.
+    # Will return a sdError valaue as a result of the operation.
+    def execute_quick_sort(self):
+        pass
+
+    # This method will return the performance data of the last
+    # execution of sorting operation.
+    # [# of records sorted, Time consumed, Start time, EndTime]
+    def get_performance_data(self):
+        pass
+
     # Will receive a list of X size and will return the sorted list
     # If an error occurs at any moment, will throw an exception
     def __recursiveMergeSort(self, arr):
