@@ -110,7 +110,16 @@ class sortCSV:
     # output file described.
     # Will return a sdError valaue as a result of the operation.
     def execute_quick_sort(self):
-        pass
+        errorCode = sdError.E_NOT_FILES_DEFINED
+        if (None != self.inputFile and
+            None != self.outputFile):
+            lista = self.__getListFromInput()
+            self.__quickSort(lista, 0, len(lista)-1)
+            outputFileHdlr = open(self.outputFile, 'w')
+            outputFileHdlr.write(','.join(lista))
+            outputFileHdlr.close()
+            errorCode = sdError.E_OK
+        return errorCode
 
     # This method will return the performnance data of the last
     # execution of sorting operation.
@@ -196,3 +205,33 @@ class sortCSV:
       
             # Heapify the root. 
             self.__heapify(arr, n, largest) 
+
+    # Function to do Quick sort 
+    def __quickSort(self, arr, low, high):
+        if low < high: 
+  
+            # pi is partitioning index, arr[p] is now 
+            # at right place 
+            pi = self.__partition(arr,low,high) 
+      
+            # Separately sort elements before 
+            # partition and after partition 
+            self.__quickSort(arr, low, pi-1) 
+            self.__quickSort(arr, pi+1, high) 
+
+    def __partition(self, arr, low, high):
+        i = ( low-1 )         # index of smaller element 
+        pivot = arr[high]     # pivot 
+      
+        for j in range(low , high): 
+      
+            # If current element is smaller than or 
+            # equal to pivot 
+            if   arr[j] <= pivot: 
+              
+                # increment index of smaller element 
+                i = i+1 
+                arr[i],arr[j] = arr[j],arr[i] 
+      
+        arr[i+1],arr[high] = arr[high],arr[i+1] 
+        return ( i+1 ) 

@@ -103,5 +103,18 @@ class test_sortCSV(unittest.TestCase):
         outputFileHdlr.close()
         self.assertEqual('0,1,10,2,3,4,5,6,7,8,9', outRead)
 
+    # Small size file heap sort
+    def test_smallSizeFIle_quickSort(self):
+        inputFileHdlr = open(VALID_INPUT_FILENAME, 'w')
+        inputFileHdlr.write('10,9,8,7,6,5,4,3,2,1,0')
+        inputFileHdlr.close()
+        self.tmpClass.set_input_data(VALID_INPUT_FILENAME)
+        self.tmpClass.set_output_data(VALID_OUTPUT_FILENAME)
+        self.tmpClass.execute_quick_sort()
+        outputFileHdlr = open(VALID_OUTPUT_FILENAME, 'r')
+        outRead = outputFileHdlr.read()
+        outputFileHdlr.close()
+        self.assertEqual('0,1,10,2,3,4,5,6,7,8,9', outRead)
+
 if __name__ == '__main__':
     unittest.main()
