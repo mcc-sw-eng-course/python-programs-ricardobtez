@@ -8,9 +8,11 @@ Author: Ricardo Arturo Benitez Cruz (A01018084)
 
 Course: Analysis, Design, and Construction of Software Systems
 
-Teacher: Dr. Gerardo PadillaName              Stmts   Miss  Cover
--------------------------------------
-sortCSV.py           91      5    95%
-test_sortCSV.py      73      0   100%
--------------------------------------
-TOTAL               164      5    97%
+Teacher: Dr. Gerardo Padilla
+
+Name              Stmts   Miss  Cover   Missing
+-----------------------------------------------
+sortCSV.py          125      7    94%   62-63, 69, 71, 76, 113, 119
+test_sortCSV.py      83      0   100%
+-----------------------------------------------
+TOTAL               208      7    97%

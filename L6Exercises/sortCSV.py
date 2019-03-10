@@ -81,13 +81,9 @@ class sortCSV:
     # Will return a sdError value as a result of the operation
     def execute_merge_sort(self):
         errorCode = sdError.E_NOT_FILES_DEFINED
-        finelResult = []
         if(None != self.inputFile and
            None != self.outputFile):
-            inputFileHdlr = open(self.inputFile, 'r')
-            dataInput = inputFileHdlr.read()
-            inputFileHdlr.close()
-            lista = dataInput.split(',')
+            lista = self.__getListFromInput()
             self.__recursiveMergeSort(lista)
             outputFileHdlr = open(self.outputFile, 'w')
             outputFileHdlr.write(','.join(lista))
@@ -99,7 +95,16 @@ class sortCSV:
     # output file described.
     # Will return a sdError value as a result of the operation.
     def execute_heap_sort(self):
-        pass
+        errorCode = sdError.E_NOT_FILES_DEFINED
+        if (None != self.inputFile and
+            None != self.outputFile):
+            lista = self.__getListFromInput()
+            self.__heapSort(lista)
+            outputFileHdlr = open(self.outputFile, 'w')
+            outputFileHdlr.write(','.join(lista))
+            outputFileHdlr.close()
+            errorCode = sdError.E_OK
+        return errorCode
 
     # Perform quick sort in the input file and writing into the
     # output file described.
@@ -107,11 +112,19 @@ class sortCSV:
     def execute_quick_sort(self):
         pass
 
-    # This method will return the performance data of the last
+    # This method will return the performnance data of the last
     # execution of sorting operation.
     # [# of records sorted, Time consumed, Start time, EndTime]
     def get_performance_data(self):
         pass
+
+    # Get list representation from the input file
+    def __getListFromInput(self):
+        inputFileHdlr = open(self.inputFile, 'r')
+        dataInput = inputFileHdlr.read()
+        inputFileHdlr.close()
+        lista = dataInput.split(',')
+        return lista
 
     # Will receive a list of X size and will return the sorted list
     # If an error occurs at any moment, will throw an exception
@@ -147,3 +160,39 @@ class sortCSV:
                 j+=1
                 k+=1
 
+    # Performs the Heap sort
+    def __heapSort(self, arr):
+        n = len(arr) 
+  
+        # Build a maxheap. 
+        for i in range(n, -1, -1): 
+            self.__heapify(arr, n, i) 
+      
+        # One by one extract elements 
+        for i in range(n-1, 0, -1): 
+            arr[i], arr[0] = arr[0], arr[i] # swap 
+            self.__heapify(arr, i, 0)
+
+    # To heapify subtree rooted at index i. 
+    # n is size of heap 
+    def __heapify(self, arr, n, i): 
+        largest = i # Initialize largest as root 
+        l = 2 * i + 1     # left = 2*i + 1 
+        r = 2 * i + 2     # right = 2*i + 2 
+      
+        # See if left child of root exists and is 
+        # greater than root 
+        if l < n and arr[i] < arr[l]: 
+            largest = l 
+      
+        # See if right child of root exists and is 
+        # greater than root 
+        if r < n and arr[largest] < arr[r]: 
+            largest = r 
+      
+        # Change root, if needed 
+        if largest != i: 
+            arr[i],arr[largest] = arr[largest],arr[i] # swap 
+      
+            # Heapify the root. 
+            self.__heapify(arr, n, largest) 
