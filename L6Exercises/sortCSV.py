@@ -5,6 +5,7 @@
 import sys
 from os import path
 from enum import Enum, auto
+from time import perf_counter
 
 # Enumeration used for error return
 class sdError(Enum):
@@ -22,7 +23,10 @@ class sortCSV:
     def __init__(self):
         self.inputFile = None
         self.outputFile = None
-        self.mergeMethod = None  # To be used later
+        self.startTime = 0
+        self.endTime = 0
+        self.NbrRecords = 0
+        self.boSorted = False
 
     # Set input data method definition
     def set_input_data(self, file_path_name):
@@ -81,6 +85,7 @@ class sortCSV:
     # Will return a sdError value as a result of the operation
     def execute_merge_sort(self):
         errorCode = sdError.E_NOT_FILES_DEFINED
+        self.startTime = perf_counter()
         if(None != self.inputFile and
            None != self.outputFile):
             lista = self.__getListFromInput()
@@ -88,6 +93,9 @@ class sortCSV:
             outputFileHdlr = open(self.outputFile, 'w')
             outputFileHdlr.write(','.join(lista))
             outputFileHdlr.close()
+            self.boSorted = True
+            self.endTime = perf_counter()
+            self.NbrRecords = len(lista)
             errorCode = sdError.E_OK
         return errorCode
 
@@ -96,6 +104,7 @@ class sortCSV:
     # Will return a sdError value as a result of the operation.
     def execute_heap_sort(self):
         errorCode = sdError.E_NOT_FILES_DEFINED
+        self.startTime = perf_counter()
         if (None != self.inputFile and
             None != self.outputFile):
             lista = self.__getListFromInput()
@@ -103,6 +112,9 @@ class sortCSV:
             outputFileHdlr = open(self.outputFile, 'w')
             outputFileHdlr.write(','.join(lista))
             outputFileHdlr.close()
+            self.boSorted = True
+            self.endTime = perf_counter()
+            self.NbrRecords = len(lista)
             errorCode = sdError.E_OK
         return errorCode
 
@@ -111,6 +123,7 @@ class sortCSV:
     # Will return a sdError valaue as a result of the operation.
     def execute_quick_sort(self):
         errorCode = sdError.E_NOT_FILES_DEFINED
+        self.startTime = perf_counter()
         if (None != self.inputFile and
             None != self.outputFile):
             lista = self.__getListFromInput()
@@ -118,6 +131,9 @@ class sortCSV:
             outputFileHdlr = open(self.outputFile, 'w')
             outputFileHdlr.write(','.join(lista))
             outputFileHdlr.close()
+            self.boSorted = True
+            self.endTime = perf_counter()
+            self.NbrRecords = len(lista)
             errorCode = sdError.E_OK
         return errorCode
 
@@ -125,7 +141,14 @@ class sortCSV:
     # execution of sorting operation.
     # [# of records sorted, Time consumed, Start time, EndTime]
     def get_performance_data(self):
-        pass
+        returnStruct = [0,0.0,0,0]
+
+        if (self.boSorted):
+            returnStruct[0] = self.NbrRecords
+            returnStruct[1] = self.endTime - self.startTime
+            returnStruct[2] = self.startTime
+            returnStruct[3] = self.endTime
+        return returnStruct
 
     # Get list representation from the input file
     def __getListFromInput(self):

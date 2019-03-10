@@ -116,5 +116,41 @@ class test_sortCSV(unittest.TestCase):
         outputFileHdlr.close()
         self.assertEqual('0,1,10,2,3,4,5,6,7,8,9', outRead)
 
+    def test_validTimePerformanceData_quickSort(self):
+        inputFileHdlr = open(VALID_INPUT_FILENAME, 'w')
+        inputFileHdlr.write('10,9,8,7,6,5,4,3,2,1,0')
+        inputFileHdlr.close()
+        self.tmpClass.set_input_data(VALID_INPUT_FILENAME)
+        self.tmpClass.set_output_data(VALID_OUTPUT_FILENAME)
+        self.tmpClass.execute_quick_sort()
+        perfData = self.tmpClass.get_performance_data()
+        self.assertLess(0, perfData[1])
+        remove(VALID_INPUT_FILENAME)
+        remove(VALID_OUTPUT_FILENAME)
+
+    def test_validNbrRecordsPerformaceData_quickSort(self):
+        inputFileHdlr = open(VALID_INPUT_FILENAME, 'w')
+        inputFileHdlr.write('10,9,8,7,6,5,4,3,2,1,0')
+        inputFileHdlr.close()
+        self.tmpClass.set_input_data(VALID_INPUT_FILENAME)
+        self.tmpClass.set_output_data(VALID_OUTPUT_FILENAME)
+        self.tmpClass.execute_quick_sort()
+        perfData = self.tmpClass.get_performance_data()
+        self.assertEqual(11, perfData[0])
+        remove(VALID_INPUT_FILENAME)
+        remove(VALID_OUTPUT_FILENAME)
+
+    def test_validDifferenceTimePerformaceData_quickSort(self):
+        inputFileHdlr = open(VALID_INPUT_FILENAME, 'w')
+        inputFileHdlr.write('10,9,8,7,6,5,4,3,2,1,0')
+        inputFileHdlr.close()
+        self.tmpClass.set_input_data(VALID_INPUT_FILENAME)
+        self.tmpClass.set_output_data(VALID_OUTPUT_FILENAME)
+        self.tmpClass.execute_quick_sort()
+        perfData = self.tmpClass.get_performance_data()
+        self.assertAlmostEqual(perfData[3]-perfData[2], perfData[1])
+        remove(VALID_INPUT_FILENAME)
+        remove(VALID_OUTPUT_FILENAME)
+
 if __name__ == '__main__':
     unittest.main()
