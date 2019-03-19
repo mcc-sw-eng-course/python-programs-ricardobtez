@@ -11,7 +11,7 @@ class enUser(Enum):
     COMPUTER = auto()
     PLAYER_ONE = auto()
     PLAYER_TWO = auto()
-    INVALID_MARKER = auto()
+    INVALID_USER = auto()
 
     def __str__(self):
         return str(self.name)
@@ -53,6 +53,7 @@ class TicTacToe:
     # While loop with the logic of the game
     def play(self):
         boGameFinished = False
+        winner = enUser.INVALID_USER
 
         while (False == boGameFinished):
             posTuple = (-1,-1)
@@ -60,10 +61,14 @@ class TicTacToe:
             if (enUser.COMPUTER == self.turn):
                 posTuple = self.__getComputerMove()
                 self.board[ posTuple[0] ][ posTuple[1] ] = enMarker.X
+                boGameFinished = self.__boPlayerWon(posTuple[0], posTuple[1])
+                winner = self.turn if (boGameFinished) else winner
                 self.turn = enUser.PLAYER_ONE
             elif (enUser.PLAYER_ONE == self.turn):
                 posTuple = self.__getUserMove(self.turn)
                 self.board[ posTuple[0] ][ posTuple[1] ] = enMarker.O
+                boGameFinished = self.__boPlayerWon(posTuple[0], posTuple[1])
+                winner = self.turn if (boGameFinished) else winner
                 self.turn = enUser.COMPUTER
 
             self.openPositions -= 1
@@ -71,6 +76,10 @@ class TicTacToe:
             if (0 == self.openPositions):
                 boGameFinished = True
             # End verification of game finished
+        if (enUser != enUser.INVALID_USER):
+            print("Game finished! the winner is:{}".format(str(winner)))
+        else:
+            print("It was a sad TIE")
     def importGame(self, fileName: str):
         # Creates empty board to be later filled
         board = [[enMarker.EMPTY for x in range(3)] for y in range(3)]
@@ -85,8 +94,6 @@ class TicTacToe:
                     elif('O' == lineList[xIndex]):
                         board[yIndex][xIndex] = enMarker.O
                 yIndex += 1
-            else:
-                continue
         fileHdlr.close()
         self.board = deepcopy(board)
 
@@ -146,7 +153,7 @@ class TicTacToe:
             boReturn = False
         return boReturn
 
-    def __boCheckHorRow(self, row):
+    def __boCheckHorRow(self, row: int):
         boReturn = True
         cellValue = enMarker.EMPTY
         if ((3 > row) and (0 <= row)):
@@ -155,12 +162,66 @@ class TicTacToe:
                     boReturn = False
                     break
                 if (enMarker.EMPTY == cellValue):
-                    cellValue == self.board[row][x]
+                    cellValue = self.board[row][x]
                 if (cellValue != self.board[row][x]):
                     boReturn = False
                     break
         else:
             raise ValueError
+        return boReturn
+
+    def __boCheckVerCol(self, col: int):
+        boReturn = True
+        cellValue = enMarker.EMPTY
+        if ((3 > col) and (0 <= col)):
+            for y in range(3):
+                if (enMarker.EMPTY == self.board[y][col]):
+                    boReturn = False
+                    break
+                if (enMarker.EMPTY == cellValue):
+                    cellValue = self.board[y][col]
+                if (cellValue != self.board[y][col]):
+                    boReturn = False
+                    break
+        else:
+            raise ValueError
+        return boReturn
+
+    def __boCheckDiag(self, startUpper: bool):
+        boReturn = True
+        cellValue = enMarker.EMPTY
+        y = 0
+        if (False == startUpper):
+            y = 2
+        for x in range(3):
+            if (enMarker.EMPTY == self.board[y][x]):
+                boReturn = False
+                break
+            if (enMarker.EMPTY == cellValue):
+                cellValue = self.board[y][x]
+            if (cellValue != self.board[y][x]):
+                boReturn = False
+                break
+            if(True == startUpper):
+                y += 1
+            else:
+                y -= 1 
+        return boReturn
+
+    def __boPlayerWon(self, y, x):
+        boReturn = False
+
+        if ((x != 1) and (y != 1)):
+            if (x == y):
+                boReturn = self.__boCheckDiag(True)
+            else:
+                boReturn = self.__boCheckDiag(False)
+
+        if (True != boReturn):
+            boReturn = self.__boCheckHorRow(y)
+        if (True != boReturn):
+            boReturn = self.__boCheckVerCol(x)
+
         return boReturn
 
 

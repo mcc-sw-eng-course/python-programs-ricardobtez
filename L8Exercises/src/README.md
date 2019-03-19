@@ -15,3 +15,10 @@ show it to you on the screen, as well as the instruction to play the game.
     -game.play()
 
 
+Name                Stmts   Miss  Cover   Missing
+-------------------------------------------------
+game.py                11      3    73%   11, 15, 17
+test_ticTacToe.py     248      0   100%
+tic_tac_toe.py        188     47    75%   17, 55-82, 101, 104, 121-139, 218, 235-239
+-------------------------------------------------
+TOTAL                 447     50    89%

@@ -11,6 +11,9 @@ from os import remove
 TMP_FILENAME = 'tmp_file.txt'
 AUX_FILENAME = 'aux_testFile1.txt'
 AUX_FILENAME2 = 'aux_testFile2.txt'
+AUX_FILENAME3 = 'aux_testFile3.txt'
+AUX_FILENAME4 = 'aux_testFile4.txt'
+AUX_FILENAME5 = 'aux_testFile5.txt'
 
 # Auxiliary funciton used to find the markers in the
 # tictactoe board. Returns a list of tupples with the coordinates.
@@ -46,8 +49,6 @@ def createBoardFromFile(fileName):
                 elif('O' == lineList[xIndex]):
                     board[yIndex][xIndex] = enMarker.O
             yIndex += 1
-        else:
-            continue
     fileHdlr.close()
     return board
 
@@ -95,7 +96,7 @@ class test_auxiliaryFunctions(unittest.TestCase):
         self.assertRaises( TypeError, searchMarkers, self.test_invalidBoard_numbers, enMarker.X)
     def test_negative_InvalidBoard_listOfStr_circle(self):
         self.assertEqual( [], searchMarkers(self.test_invalidBoard_string, enMarker.O))
-    def test_negative_InvalidBoard_listOfStr_circle(self):
+    def test_negative_InvalidBoard_listOfStr_cross(self):
         self.assertEqual( [], searchMarkers(self.test_invalidBoard_string, enMarker.X))
 
 # Main test class
@@ -179,6 +180,87 @@ class test_ticTacToe(unittest.TestCase):
     def test_positive_boCheckHorRow_2(self):
         self.game.newGame()
         self.assertFalse(self.game._TicTacToe__boCheckHorRow(2))
+    def test_positive_boCheckHorRow_AlmostFinishedGame_0(self):
+        self.game.newGame()
+        self.game.importGame(AUX_FILENAME3)
+        self.assertTrue(self.game._TicTacToe__boCheckHorRow(0))
+    def test_positive_boCheckHorRow_AlmostFinishedGame_1(self):
+        self.game.newGame()
+        self.game.importGame(AUX_FILENAME3)
+        self.assertTrue(self.game._TicTacToe__boCheckHorRow(1))
+    def test_positive_boCheckHorRow_AlmostFinishedGame_2(self):
+        self.game.newGame()
+        self.game.importGame(AUX_FILENAME3)
+        self.assertFalse(self.game._TicTacToe__boCheckHorRow(2))
+
+    def test_positive_boCheckVerCol_0(self):
+        self.game.newGame()
+        self.assertFalse(self.game._TicTacToe__boCheckVerCol(0))
+    def test_positive_boCheckVerCol_1(self):
+        self.game.newGame()
+        self.assertFalse(self.game._TicTacToe__boCheckVerCol(1))
+    def test_positive_boCheckVerCol_2(self):
+        self.game.newGame()
+        self.assertFalse(self.game._TicTacToe__boCheckVerCol(2))
+    def test_positive_boCheckVerCol_AlmostFinishedGame_0(self):
+        self.game.newGame()
+        self.game.importGame(AUX_FILENAME4)
+        self.assertTrue(self.game._TicTacToe__boCheckVerCol(0))
+    def test_positive_boCheckVerCol_AlmostFinishedGame_1(self):
+        self.game.newGame()
+        self.game.importGame(AUX_FILENAME4)
+        self.assertTrue(self.game._TicTacToe__boCheckVerCol(1))
+    def test_positive_boCheckVerCol_AlmostFinishedGame_2(self):
+        self.game.newGame()
+        self.game.importGame(AUX_FILENAME4)
+        self.assertFalse(self.game._TicTacToe__boCheckVerCol(2))
+
+    def test_positive_boCheckDiagRow_AlmostFinishedGame_File2_True(self):
+        self.game.newGame()
+        self.game.importGame(AUX_FILENAME2)
+        self.assertFalse(self.game._TicTacToe__boCheckDiag(True))
+    def test_positive_boCheckDiagRow_AlmostFinishedGame_File3_True(self):
+        self.game.newGame()
+        self.game.importGame(AUX_FILENAME3)
+        self.assertFalse(self.game._TicTacToe__boCheckDiag(True))
+    def test_positive_boCheckDiagRow_AlmostFinishedGame_File4_True(self):
+        self.game.newGame()
+        self.game.importGame(AUX_FILENAME4)
+        self.assertFalse(self.game._TicTacToe__boCheckDiag(True))
+    def test_positive_boCheckDiagRow_AlmostFinishedGame_File5_True(self):
+        self.game.newGame()
+        self.game.importGame(AUX_FILENAME5)
+        self.assertTrue(self.game._TicTacToe__boCheckDiag(True))
+    def test_positive_boCheckDiagRow_AlmostFinishedGame_File2_False(self):
+        self.game.newGame()
+        self.game.importGame(AUX_FILENAME2)
+        self.assertTrue(self.game._TicTacToe__boCheckDiag(False))
+    def test_positive_boCheckDiagRow_AlmostFinishedGame_File3_False(self):
+        self.game.newGame()
+        self.game.importGame(AUX_FILENAME3)
+        self.assertFalse(self.game._TicTacToe__boCheckDiag(False))
+    def test_positive_boCheckDiagRow_AlmostFinishedGame_File4_False(self):
+        self.game.newGame()
+        self.game.importGame(AUX_FILENAME4)
+        self.assertFalse(self.game._TicTacToe__boCheckDiag(False))
+    def test_positive_boCheckDiagRow_AlmostFinishedGame_File5_False(self):
+        self.game.newGame()
+        self.game.importGame(AUX_FILENAME5)
+        self.assertTrue(self.game._TicTacToe__boCheckDiag(False))
+
+    def test_positive_boGameWon_AlmostFinishedGame_File3_0_0(self):
+        self.game.newGame()
+        self.game.importGame(AUX_FILENAME3)
+        self.assertTrue(self.game._TicTacToe__boPlayerWon(0,0))
+    def test_positive_boGameWon_AlmostFinishedGame_File3_0_1(self):
+        self.game.newGame()
+        self.game.importGame(AUX_FILENAME3)
+        self.assertTrue(self.game._TicTacToe__boPlayerWon(0,1))
+    def test_positive_boGameWon_AlmostFinishedGame_File3_2_1(self):
+        self.game.newGame()
+        self.game.importGame(AUX_FILENAME3)
+        # self.game.display()
+        self.assertFalse(self.game._TicTacToe__boPlayerWon(2,1))
 
     # Negative testing
     def test_negative_validateCoordinates_2_3(self):
@@ -199,9 +281,12 @@ class test_ticTacToe(unittest.TestCase):
         self.game.newGame()
         self.assertRaises(ValueError, self.game._TicTacToe__boCheckHorRow, -1)
 
-
-
-
+    def test_negative_boCheckVerCol_3(self):
+        self.game.newGame()
+        self.assertRaises(ValueError, self.game._TicTacToe__boCheckVerCol, 3)
+    def test_negative_boCheckVerCol_Minus1(self):
+        self.game.newGame()
+        self.assertRaises(ValueError, self.game._TicTacToe__boCheckVerCol, -1)
 
 if __name__ == '__main__':
     unittest.main()
