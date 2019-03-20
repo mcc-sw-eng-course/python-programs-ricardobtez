@@ -31,13 +31,18 @@ class TicTacToe:
         self.gamesPlayed = 0
         self.difficulty = 1
         # Tupple with (Player1, Computer/Player2, Tie) score
-        self.gameScore = (0,0,0)
+        self.gameScore = {
+            "PLAYER_ONE": 0,
+            "COMPUTER": 0,
+            "tie": 0
+        }
         self.turn = enUser.COMPUTER
         self.openPositions = 9
 
     def newGame(self):
         self.board = [[enMarker.EMPTY for x in range(3)] for y in range(3)]
         self.openPositions = 9
+        self.turn = enUser.COMPUTER
     def display(self):
         for row in range(len(self.board)):
             rowStr = ''
@@ -53,6 +58,7 @@ class TicTacToe:
     def play(self):
         boGameFinished = False
         winner = enUser.INVALID_USER
+        self.gamesPlayed += 1
 
         while (False == boGameFinished):
             posTuple = (-1,-1)
@@ -75,10 +81,12 @@ class TicTacToe:
             if (0 == self.openPositions):
                 boGameFinished = True
             # End verification of game finished
-        if (enUser != enUser.INVALID_USER):
+        if (winner != enUser.INVALID_USER):
             print("Game finished! the winner is:{}".format(str(winner)))
+            self.gameScore[str(winner)] += 1
         else:
             print("It was a sad TIE")
+            self.gameScore["tie"] += 1
     def importGame(self, fileName: str):
         # Creates empty board to be later filled
         board = [[enMarker.EMPTY for x in range(3)] for y in range(3)]
@@ -96,11 +104,14 @@ class TicTacToe:
         fileHdlr.close()
         self.board = deepcopy(board)
 
-    def exportGame(self, fileName: str):
-        pass
     # Get games data
     def getGamesReport(self):
-        pass
+        print("The number of games played was:" + str(self.gamesPlayed))
+        print("The amount of games won by {} was: {}".format(
+            str(enUser.PLAYER_ONE), self.gameScore["PLAYER_ONE"]))
+        print("The number of ties is:{}".format( str(self.gameScore["tie"]) ))
+        print("The number of times won by the {} was:{}".format(
+            str(enUser.COMPUTER), self.gameScore["COMPUTER"]))
     
     # Private functions ?
     def __getComputerMove(self):
@@ -234,5 +245,8 @@ if __name__ == '__main__':
     print('Wellcome to the TicTacToe game')
     rand = randrange(0,2,1)
     game = TicTacToe((enUser.COMPUTER))
-    game.newGame()
-    game.play()
+    for i in range(3):
+        game.newGame()
+        game.play()
+
+    game.getGamesReport()
