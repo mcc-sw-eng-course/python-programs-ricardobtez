@@ -4,7 +4,6 @@
 
 from random import randrange
 from enum import Enum, auto, IntEnum
-from game import Game
 from copy import deepcopy
 
 class enUser(Enum):

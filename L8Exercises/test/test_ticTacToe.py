@@ -2,18 +2,20 @@
 # Student number: A01018084
 # Program: Test for the TicTacToe
 
+import sys
+sys.path.append('./aux')
+sys.path.append('../src')
 import unittest
 from tic_tac_toe import TicTacToe, enMarker
 from copy import deepcopy
-import sys
 from os import remove
 
-TMP_FILENAME = 'tmp_file.txt'
-AUX_FILENAME = 'aux_testFile1.txt'
-AUX_FILENAME2 = 'aux_testFile2.txt'
-AUX_FILENAME3 = 'aux_testFile3.txt'
-AUX_FILENAME4 = 'aux_testFile4.txt'
-AUX_FILENAME5 = 'aux_testFile5.txt'
+TMP_FILENAME = 'aux/tmp_file.txt'
+AUX_FILENAME = 'aux/aux_testFile1.txt'
+AUX_FILENAME2 = 'aux/aux_testFile2.txt'
+AUX_FILENAME3 = 'aux/aux_testFile3.txt'
+AUX_FILENAME4 = 'aux/aux_testFile4.txt'
+AUX_FILENAME5 = 'aux/aux_testFile5.txt'
 
 # Auxiliary funciton used to find the markers in the
 # tictactoe board. Returns a list of tupples with the coordinates.
