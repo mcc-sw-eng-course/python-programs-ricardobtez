@@ -5,6 +5,7 @@
 from random import randrange
 from enum import Enum, auto, IntEnum
 from copy import deepcopy
+import socket
 
 class enUser(Enum):
     COMPUTER = auto()
@@ -25,19 +26,29 @@ class enMarker(IntEnum):
         return str(returnValue)
 
 class TicTacToe:
-    def __init__(self, startUser: enUser = enUser.COMPUTER):
+    def __init__(self,
+                 startUser: enUser = enUser.COMPUTER,
+                 boTwoPlayers: bool = False):
         self.enStartUser = startUser
         self.board = [[enMarker.EMPTY for x in range(3)] for y in range(3)]
         self.gamesPlayed = 0
         self.difficulty = 1
-        # Tupple with (Player1, Computer/Player2, Tie) score
+        self.boTwoPlayers = boTwoPlayers
+        self.openPositions = 9
         self.gameScore = {
             "PLAYER_ONE": 0,
             "COMPUTER": 0,
+            "PLAYER_TWO": 0,
             "tie": 0
         }
         self.turn = enUser.COMPUTER
-        self.openPositions = 9
+        self.comSocket = None
+
+        if (True == boTwoPlayers):
+            self.turn = enUser.PLAYER_ONE
+            self.comSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.comSocket.bind((socket.gethostname(), 8787))
+            # self.comSocket.listen(5)
 
     def newGame(self):
         self.board = [[enMarker.EMPTY for x in range(3)] for y in range(3)]
@@ -47,12 +58,14 @@ class TicTacToe:
         for row in range(len(self.board)):
             rowStr = ''
             if (row > 0):
-                print(5*'-')
+                # print(5*'-')
+                self.__sendDataToBuffer(5*'-')
             for column in range(len(self.board[row])):
                 if(column > 0):
                     rowStr += '|'
                 rowStr += str(self.board[row][column])
-            print(rowStr)
+            self.__sendDataToBuffer(rowStr)
+            # print(rowStr)
 
     # While loop with the logic of the game
     def play(self):
@@ -69,12 +82,17 @@ class TicTacToe:
                 boGameFinished = self.__boPlayerWon(posTuple[0], posTuple[1])
                 winner = self.turn if (boGameFinished) else winner
                 self.turn = enUser.PLAYER_ONE
-            elif (enUser.PLAYER_ONE == self.turn):
+            # elif (enUser.PLAYER_ONE == self.turn):
+            else:
                 posTuple = self.__getUserMove(self.turn)
                 self.board[ posTuple[0] ][ posTuple[1] ] = enMarker.O
                 boGameFinished = self.__boPlayerWon(posTuple[0], posTuple[1])
                 winner = self.turn if (boGameFinished) else winner
-                self.turn = enUser.COMPUTER
+
+                if (True != self.boTwoPlayers):
+                    self.turn = enUser.COMPUTER
+                else:
+                    self.turn = enUser.PLAYER_TWO if (self.turn == enUser.PLAYER_ONE) else enUser.PLAYER_ONE
 
             self.openPositions -= 1
             # Verification of the game finished
@@ -127,14 +145,14 @@ class TicTacToe:
         # else:
         #     pass
         return retTuple
-    def __getUserMove(self, enUser):
+    def __getUserMove(self, user):
         retTuple = (-1,-1)
         boValidInput = False
         while (False == boValidInput):
             self.display()
-            mark = enMarker.O if (enUser.PLAYER_ONE == enUser) else enMarker.X
-            print('\n{}. Where should I put the {} mark?'.format( enUser, str(mark) ))
-            userIn = input("Input the coordinates 'y x', eg. '1 2' or '2 2: ")
+            mark = enMarker.O if (enUser.PLAYER_ONE == user) else enMarker.X
+            print('\n{}. Where should I put the {} mark?'.format( user, str(mark) ))
+            userIn = self.__getUserInput(user)
             boValidInput = self.__boValidateCoordinates(userIn)
 
             if (True == boValidInput):
@@ -231,8 +249,29 @@ class TicTacToe:
             boReturn = self.__boCheckHorRow(y)
         if (True != boReturn):
             boReturn = self.__boCheckVerCol(x)
+        # Checks both the diagonals in cas of the 1 1 position
+        if((y == 1) and (x == 1) and (True != boReturn)):
+            boReturn = self.__boCheckDiag(True)
+            if(True != boReturn):
+                boReturn = self.__boCheckDiag(False)
 
         return boReturn
+
+    def __sendDataToBuffer(self, data):
+        if (True == self.boTwoPlayers):
+            # self.comSocket.send
+            print(data)
+        else:
+            print(data)
+
+    def __getUserInput(self, user: enUser):
+        dataReturn = ""
+        if((True == self.boTwoPlayers) and (enUser.PLAYER_ONE == user)):
+            dataReturn = 
+        else:
+            dataReturn = input("Input the coordinates 'y x', eg. '1 2' or '2 2': ")
+        return dataReturn
+
 
 
     # Dificulty computer movements section
