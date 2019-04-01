@@ -3,18 +3,9 @@
 # Program: TicTacToe game
 
 from random import randrange
-from enum import Enum, auto, IntEnum
 from copy import deepcopy
-import socket
-
-class enUser(Enum):
-    COMPUTER = auto()
-    PLAYER_ONE = auto()
-    PLAYER_TWO = auto()
-    INVALID_USER = auto()
-
-    def __str__(self):
-        return str(self.name)
+from game import *
+from IPlayer import enUser
 
 class enMarker(IntEnum):
     EMPTY = auto()
@@ -25,47 +16,27 @@ class enMarker(IntEnum):
         returnValue = self.name if enMarker.EMPTY != self.value else ' '
         return str(returnValue)
 
-class TicTacToe:
-    def __init__(self,
-                 startUser: enUser = enUser.COMPUTER,
-                 boTwoPlayers: bool = False):
-        self.enStartUser = startUser
-        self.board = [[enMarker.EMPTY for x in range(3)] for y in range(3)]
+class TicTacToe(IGame):
+    def __init__(self, boTwoPlayers: bool = False):
         self.gamesPlayed = 0
-        self.difficulty = 1
         self.boTwoPlayers = boTwoPlayers
         self.openPositions = 9
+        self.board.setBoardInfo(3, [enMarker.EMPTY, enMarker.X, enMarker.O], enBoardType.TIC_TAC_TOE)
         self.gameScore = {
             "PLAYER_ONE": 0,
             "COMPUTER": 0,
             "PLAYER_TWO": 0,
             "tie": 0
         }
-        self.turn = enUser.COMPUTER
-        self.comSocket = None
 
-        if (True == boTwoPlayers):
-            self.turn = enUser.PLAYER_ONE
-            self.comSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            self.comSocket.bind((socket.gethostname(), 8787))
-            # self.comSocket.listen(5)
+        if(True == self.boTwoPlayers):
+            self.turn = (enUser)(randrange(1, enUser.INVALID_USER, 1))
+        else:
+            self.turn = (enUser)(randrange(0, ((int)enUser.INVALID_USER) - 1, 1))
 
     def newGame(self):
-        self.board = [[enMarker.EMPTY for x in range(3)] for y in range(3)]
+        self.board.resetBoard()
         self.openPositions = 9
-        self.turn = enUser.COMPUTER
-    def display(self):
-        for row in range(len(self.board)):
-            rowStr = ''
-            if (row > 0):
-                # print(5*'-')
-                self.__sendDataToBuffer(5*'-')
-            for column in range(len(self.board[row])):
-                if(column > 0):
-                    rowStr += '|'
-                rowStr += str(self.board[row][column])
-            self.__sendDataToBuffer(rowStr)
-            # print(rowStr)
 
     # While loop with the logic of the game
     def play(self):
@@ -82,7 +53,6 @@ class TicTacToe:
                 boGameFinished = self.__boPlayerWon(posTuple[0], posTuple[1])
                 winner = self.turn if (boGameFinished) else winner
                 self.turn = enUser.PLAYER_ONE
-            # elif (enUser.PLAYER_ONE == self.turn):
             else:
                 posTuple = self.__getUserMove(self.turn)
                 self.board[ posTuple[0] ][ posTuple[1] ] = enMarker.O
@@ -130,56 +100,6 @@ class TicTacToe:
         print("The number of ties is:{}".format( str(self.gameScore["tie"]) ))
         print("The number of times won by the {} was:{}".format(
             str(enUser.COMPUTER), self.gameScore["COMPUTER"]))
-    
-    # Private functions ?
-    def __getComputerMove(self):
-        retTuple = (-1,-1)
-        if (1 == self.difficulty):
-            while((-1,-1) == retTuple):
-                tmpTuple = self.__randCompMove()
-                if (enMarker.EMPTY == self.board[ tmpTuple[0] ][ tmpTuple[1] ]):
-                    retTuple = tmpTuple
-        # Used for the levels of difficulty
-        # elif (2 == self.difficulty):
-        #     pass
-        # else:
-        #     pass
-        return retTuple
-    def __getUserMove(self, user):
-        retTuple = (-1,-1)
-        boValidInput = False
-        while (False == boValidInput):
-            self.display()
-            mark = enMarker.O if (enUser.PLAYER_ONE == user) else enMarker.X
-            print('\n{}. Where should I put the {} mark?'.format( user, str(mark) ))
-            userIn = self.__getUserInput(user)
-            boValidInput = self.__boValidateCoordinates(userIn)
-
-            if (True == boValidInput):
-                tmpTuple = tuple(int(x) for x in userIn.split(' '))
-                if (enMarker.EMPTY == self.board[ tmpTuple[0] ][ tmpTuple[1] ]):
-                    retTuple = tmpTuple
-                else:
-                    boValidInput = False
-                    print("Invalid input. Already occupied")
-            else:
-                print('\n\n REALLY? \n\n')
-        return retTuple
-
-    def __boValidateCoordinates(self, userInput):
-        boReturn = True
-        splitList = userInput.split(' ')
-        if (2 == len(splitList)):
-            for element in splitList:
-                if (False == element.isdigit()):
-                    boReturn = False
-                else:
-                    if((2 < int(element)) or
-                       (0 > int(element))):
-                        boReturn = False
-        else:
-            boReturn = False
-        return boReturn
 
     def __boCheckHorRow(self, row: int):
         boReturn = True
@@ -257,33 +177,10 @@ class TicTacToe:
 
         return boReturn
 
-    def __sendDataToBuffer(self, data):
-        if (True == self.boTwoPlayers):
-            # self.comSocket.send
-            print(data)
-        else:
-            print(data)
-
-    def __getUserInput(self, user: enUser):
-        dataReturn = ""
-        if((True == self.boTwoPlayers) and (enUser.PLAYER_ONE == user)):
-            dataReturn = 
-        else:
-            dataReturn = input("Input the coordinates 'y x', eg. '1 2' or '2 2': ")
-        return dataReturn
-
-
-
-    # Dificulty computer movements section
-    def __randCompMove(self):
-        randY = randrange(0,3,1)
-        randX = randrange(0,3,1)
-        return (randY, randX)
-
 if __name__ == '__main__':
     print('Wellcome to the TicTacToe game')
     rand = randrange(0,2,1)
-    game = TicTacToe((enUser.COMPUTER))
+    game = TicTacToe()
     for i in range(3):
         game.newGame()
         game.play()
