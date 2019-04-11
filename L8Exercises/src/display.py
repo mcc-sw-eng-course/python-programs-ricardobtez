@@ -3,6 +3,7 @@
 # Program: Game master class
 
 import socket
+from IPlayer import enUser
 
 class Display:
 
@@ -30,20 +31,12 @@ class Display:
         #     self.comSocket.bind((socket.gethostname(), 8787))
             # self.comSocket.listen(5)
 
-    def display(self, board: Board, boLocal: bool=True):
+    def display(self, data:str, boLocal: bool=True):
         if (True == boLocal):
-            if (enBoardType.TIC_TAC_TOE == board.getType()):
-                for row in range(len(board)):
-                    rowStr = ''
-                    if (row > 0):
-                        self.__sendDataToBuffer(5*'-')
-                    for column in range(len(board[row])):
-                        if(column > 0):
-                            rowStr += '|'
-                        rowStr += str(board[row][column])
-                    self.__sendDataToBuffer(rowStr)
-            else:
-                raise Exception("Invlaid board type")
+            print(data)
+        else:
+            self.comSocket.send(data)
+            
     def displayInfo(self, data:str, boLocal:bool = True):
         if (True == boLocal):
             print(data)

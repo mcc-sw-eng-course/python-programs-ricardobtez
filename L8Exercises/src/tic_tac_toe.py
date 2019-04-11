@@ -2,10 +2,9 @@
 # Student number: A01018084
 # Program: TicTacToe game
 
-from random import randrange
 from copy import deepcopy
 from game import *
-from IPlayer import enUser
+from playerMgr import *
 
 class enMarker(IntEnum):
     EMPTY = auto()
@@ -30,9 +29,10 @@ class TicTacToe(IGame):
         }
 
         if(True == self.boTwoPlayers):
-            self.turn = (enUser)(randrange(1, enUser.INVALID_USER, 1))
+            playerList = [enUser.PLAYER_ONE, enUser.PLAYER_TWO]
         else:
-            self.turn = (enUser)(randrange(0, ((int)enUser.INVALID_USER) - 1, 1))
+            playerList = [enUser.COMPUTER, enUser.PLAYER_ONE]
+        self.playerMgr = PlayerMgr(playerList, [enMarker.O, enMarker.X])
 
     def newGame(self):
         self.board.resetBoard()
@@ -47,23 +47,13 @@ class TicTacToe(IGame):
         while (False == boGameFinished):
             posTuple = (-1,-1)
 
-            if (enUser.COMPUTER == self.turn):
-                posTuple = self.__getComputerMove()
-                self.board[ posTuple[0] ][ posTuple[1] ] = enMarker.X
-                boGameFinished = self.__boPlayerWon(posTuple[0], posTuple[1])
-                winner = self.turn if (boGameFinished) else winner
-                self.turn = enUser.PLAYER_ONE
-            else:
-                posTuple = self.__getUserMove(self.turn)
-                self.board[ posTuple[0] ][ posTuple[1] ] = enMarker.O
-                boGameFinished = self.__boPlayerWon(posTuple[0], posTuple[1])
-                winner = self.turn if (boGameFinished) else winner
-
-                if (True != self.boTwoPlayers):
-                    self.turn = enUser.COMPUTER
-                else:
-                    self.turn = enUser.PLAYER_TWO if (self.turn == enUser.PLAYER_ONE) else enUser.PLAYER_ONE
-
+            posTuple = self.playerMgr.getNextMove()
+            self.board[ posTuple[0] ][ posTuple[1] ] = self.playerMgr.getMarker()
+            boGameFinished = self.__boPlayerWon(posTuple[0], posTuple[1])
+            if (True == boGameFinished):
+                winner = self.playerMgr.getCurrentPlayer()
+                boGameFinished = True
+            self.playerMgr.nextPlayer()
             self.openPositions -= 1
             # Verification of the game finished
             if (0 == self.openPositions):
@@ -177,9 +167,22 @@ class TicTacToe(IGame):
 
         return boReturn
 
+
+            # if (enBoardType.TIC_TAC_TOE == board.getType()):
+            #     for row in range(len(board)):
+            #         rowStr = ''
+            #         if (row > 0):
+            #             self.__sendDataToBuffer(5*'-')
+            #         for column in range(len(board[row])):
+            #             if(column > 0):
+            #                 rowStr += '|'
+            #             rowStr += str(board[row][column])
+            #         self.__sendDataToBuffer(rowStr)
+            # else:
+            #     raise Exception("Invlaid board type")
+
 if __name__ == '__main__':
     print('Wellcome to the TicTacToe game')
-    rand = randrange(0,2,1)
     game = TicTacToe()
     for i in range(3):
         game.newGame()
