@@ -1,6 +1,7 @@
 
 from enum import Enum, auto, IntEnum
 from board import Board
+from display import *
 
 class enUser(Enum):
     COMPUTER = auto()
@@ -17,7 +18,7 @@ class IPlayer:
             self.playerId = playerId
         else:
             self.playerId = enUser.INVALID_USER
-        self.displayMgr = Display()
+        self.displayMgr = Display.getInstance()
     def getPlayerId(self):
         return self.playerId
 

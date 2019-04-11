@@ -22,7 +22,7 @@ class Board:
             self.size = size
         else:
             raise ValueError("Invalid input for the board size")
-        self.domain = domain
+        self.domain = deepcopy(domain)
         self.type = boardType
         self.resetBoard()
 
@@ -37,12 +37,12 @@ class Board:
     def getType(self):
         return self.type
 
-    def boValidateCoordinates(self, userInput):
+    def boValidateCoordinates(self, playerInput):
         boReturn = False
 
         if (enBoardType.TIC_TAC_TOE == self.boardType):
             boReturn = True
-            splitList = userInput.split(' ')
+            splitList = playerInput.split(' ')
             if (2 == len(splitList)):
                 for element in splitList:
                     if (False == element.isdigit()):
