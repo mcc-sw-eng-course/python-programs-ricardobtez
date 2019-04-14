@@ -3,7 +3,6 @@
 # Program: Game master class
 
 import socket
-from IPlayer import enUser
 
 class Display:
 
@@ -46,13 +45,13 @@ class Display:
     def receiveInfo(self, boLocal:bool = True):
         pass
 
-    def __getUserInput(self, user: enUser):
-        dataReturn = ""
-        if((True == self.boTwoPlayers) and (enUser.PLAYER_ONE == user)):
-            dataReturn = "0 0"
-        else:
-            dataReturn = input("Input the coordinates 'y x', eg. '1 2' or '2 2': ")
-        return dataReturn
+    # def __getUserInput(self, user: enUser):
+    #     dataReturn = ""
+    #     if((True == self.boTwoPlayers) and (enUser.PLAYER_ONE == user)):
+    #         dataReturn = "0 0"
+    #     else:
+    #         dataReturn = input("Input the coordinates 'y x', eg. '1 2' or '2 2': ")
+    #     return dataReturn
 
     def __sendDataToBuffer(self, data):
         if (True == self.boTwoPlayers):

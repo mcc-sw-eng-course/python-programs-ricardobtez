@@ -1,5 +1,4 @@
 
-from IPlayer import *
 from random import randrange
 
 class ComputerPlayer(IPlayer):

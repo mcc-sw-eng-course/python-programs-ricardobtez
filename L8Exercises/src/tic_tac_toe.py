@@ -20,6 +20,7 @@ class TicTacToe(IGame):
         self.gamesPlayed = 0
         self.boTwoPlayers = boTwoPlayers
         self.openPositions = 9
+        self.board = Board()
         self.board.setBoardInfo(3, [enMarker.EMPTY, enMarker.X, enMarker.O], enBoardType.TIC_TAC_TOE)
         self.gameScore = {
             "PLAYER_ONE": 0,
@@ -47,7 +48,12 @@ class TicTacToe(IGame):
         while (False == boGameFinished):
             posTuple = (-1,-1)
 
-            posTuple = self.playerMgr.getNextMove()
+            while (posTuple != (-1,-1)):
+                tmpTupple = self.playerMgr.getNextMove(self.board)
+
+                if (True == self.board.boValidateCoordinates(tmpTupple)):
+                    posTuple = tmpTupple
+
             self.board[ posTuple[0] ][ posTuple[1] ] = self.playerMgr.getMarker()
             boGameFinished = self.__boPlayerWon(posTuple[0], posTuple[1])
             if (True == boGameFinished):

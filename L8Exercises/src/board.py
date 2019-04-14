@@ -36,6 +36,12 @@ class Board:
         return self.domain
     def getType(self):
         return self.type
+    def boFillPosition(self, data, x:int, y:int):
+        boReturn = False
+        if ((data is in self.domain) and (self.domain[0] != data)):
+            if (self.domain[0] == self.board[y][x]):
+                self.board[]
+        return boReturn
 
     def boValidateCoordinates(self, playerInput):
         boReturn = False
@@ -53,4 +59,9 @@ class Board:
                             boReturn = False
             else:
                 boReturn = False
+
+            if (True == boReturn):
+                position = [int(x) for x in splitList]
+                if (self.board[position[0]][position[1]] != self.domain[0]):
+                    boReturn = False
         return boReturn
