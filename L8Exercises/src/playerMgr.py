@@ -3,6 +3,7 @@ from enum import auto, IntEnum
 from random import randrange
 from display import *
 from board import Board
+from copy import deepcopy
 
 class enUser(IntEnum):
     COMPUTER = auto()
@@ -15,16 +16,17 @@ class enUser(IntEnum):
 
 class PlayerMgr:
     def __init__(self, plyrsList:list, markers:list):
-        self.playerList = []
-        for element in plyrsList:
-            if (enUser.COMPUTER == element):
-                self.playerList.append(enUser.COMPUTER)
-            elif (enUser.PLAYER_ONE == element):
-                self.playerList.append(enUser.PLAYER_ONE)
-            elif(enUser.PLAYER_TWO == element):
-                self.playerList.append(enUser.PLAYER_TWO)
+        # self.playerList = []
+        # for element in plyrsList:
+        #     if (enUser.COMPUTER == element):
+        #         self.playerList.append(enUser.COMPUTER)
+        #     elif (enUser.PLAYER_ONE == element):
+        #         self.playerList.append(enUser.PLAYER_ONE)
+        #     elif(enUser.PLAYER_TWO == element):
+        #         self.playerList.append(enUser.PLAYER_TWO)
+        self.playerList = deepcopy(plyrsList)
         startRandUser = randrange(0, len(self.playerList)-1, 1)
-        self.currentPlayer = self.playerList[startRandUser]
+        self.currentPlayer = self.playerList[0]#self.playerList[startRandUser]
         self.displayMgr = Display.getInstance()
         self.moves = {}
 
@@ -41,8 +43,9 @@ class PlayerMgr:
             # Setting up the data to send to Display Mgr
 
             if (enUser.PLAYER_ONE == self.currentPlayer):
-                self.displayMgr.get
-                move = move
+                # self.displayMgr.get
+                # move = move
+                raise Exception("Not finished")
         # self.currentPlayer.getNextMove()
         return move
     def nextPlayer(self):
@@ -53,9 +56,8 @@ class PlayerMgr:
         return self.moves[self.currentPlayer]
 
     def __randCompMove(self, limit):
-        size = board.getBoardSize()
-        randY = randrange(0,limits,1)
-        randX = randrange(0,limits,1)
+        randY = randrange(0,limit,1)
+        randX = randrange(0,limit,1)
         return (randY, randX)
 
 if __name__ == '__main__':
