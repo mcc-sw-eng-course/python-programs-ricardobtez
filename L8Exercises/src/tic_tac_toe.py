@@ -48,13 +48,15 @@ class TicTacToe(IGame):
         while (False == boGameFinished):
             posTuple = (-1,-1)
 
-            while (posTuple != (-1,-1)):
+            while (posTuple == (-1,-1)):
                 tmpTupple = self.playerMgr.getNextMove(self.board)
 
                 if (True == self.board.boValidateCoordinates(tmpTupple)):
                     posTuple = tmpTupple
 
-            self.board[ posTuple[0] ][ posTuple[1] ] = self.playerMgr.getMarker()
+            self.board.boFillPosition(self.playerMgr.getMarker(),
+                                      posTuple[0],
+                                      posTuple[1])
             boGameFinished = self.__boPlayerWon(posTuple[0], posTuple[1])
             if (True == boGameFinished):
                 winner = self.playerMgr.getCurrentPlayer()
@@ -102,12 +104,12 @@ class TicTacToe(IGame):
         cellValue = enMarker.EMPTY
         if ((3 > row) and (0 <= row)):
             for x in range(3):
-                if (enMarker.EMPTY == self.board[row][x]):
+                if (enMarker.EMPTY == self.board.getDomainInCell(row, x)):
                     boReturn = False
                     break
                 if (enMarker.EMPTY == cellValue):
-                    cellValue = self.board[row][x]
-                if (cellValue != self.board[row][x]):
+                    cellValue = self.board.getDomainInCell(row, x)
+                if (cellValue != self.board.getDomainInCell(row, x)):
                     boReturn = False
                     break
         else:
@@ -119,12 +121,12 @@ class TicTacToe(IGame):
         cellValue = enMarker.EMPTY
         if ((3 > col) and (0 <= col)):
             for y in range(3):
-                if (enMarker.EMPTY == self.board[y][col]):
+                if (enMarker.EMPTY == self.board.getDomainInCell(y, col)):
                     boReturn = False
                     break
                 if (enMarker.EMPTY == cellValue):
-                    cellValue = self.board[y][col]
-                if (cellValue != self.board[y][col]):
+                    cellValue = self.board.getDomainInCell(y, col)
+                if (cellValue != self.board.getDomainInCell(y, col)):
                     boReturn = False
                     break
         else:
@@ -138,12 +140,12 @@ class TicTacToe(IGame):
         if (False == startUpper):
             y = 2
         for x in range(3):
-            if (enMarker.EMPTY == self.board[y][x]):
+            if (enMarker.EMPTY == self.board.getDomainInCell(y, x)):
                 boReturn = False
                 break
             if (enMarker.EMPTY == cellValue):
-                cellValue = self.board[y][x]
-            if (cellValue != self.board[y][x]):
+                cellValue = self.board.getDomainInCell(y, x)
+            if (cellValue != self.board.getDomainInCell(y, x)):
                 boReturn = False
                 break
             if(True == startUpper):
