@@ -38,7 +38,7 @@ class Checkers(IGame):
             playerList = [enUser.PLAYER_ONE, enUser.PLAYER_TWO]
         else:
             playerList = [enUser.COMPUTER, enUser.PLAYER_ONE]
-        self.playerMgr = PlayerMgr(playerList, [enChecker.RED, enChecker.WHITE])
+        self.playerMgr = PlayerMgr(playerList, [enChecker.WHITE, enChecker.RED])
 
     def newGame(self):
         self.board.resetBoard()
@@ -46,6 +46,14 @@ class Checkers(IGame):
 
     def play(self):
         self.displayMgr.display(str(self.board))
+        boGameFinished = False
+        winner = enUser.INVALID_USER
+
+        while (False == boGameFinished):
+            self.playerMgr.getNextMove(self.board)
+            self.playerMgr.nextPlayer()
+            self.playerMgr.getNextMove(self.board)
+            boGameFinished = True
 
 
     def __resetBoard(self):
