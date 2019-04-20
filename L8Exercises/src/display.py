@@ -1,6 +1,6 @@
 # Author: Ricardo Arturo Benitez Cruz
 # Student number: A01018084
-# Program: Game master class
+# Program: Display class
 
 import socket
 
