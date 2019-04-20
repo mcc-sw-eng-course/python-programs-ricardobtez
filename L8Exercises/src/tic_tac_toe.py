@@ -5,6 +5,7 @@
 from copy import deepcopy
 from game import *
 from playerMgr import *
+from display import Display as dp
 
 class enMarker(IntEnum):
     EMPTY = auto()
@@ -92,11 +93,12 @@ class TicTacToe(IGame):
 
     # Get games data
     def getGamesReport(self):
-        print("The number of games played was:" + str(self.gamesPlayed))
-        print("The amount of games won by {} was: {}".format(
+        displayManager = dp.getInstance()
+        displayManager.display("The number of games played was:" + str(self.gamesPlayed))
+        displayManager.display("The amount of games won by {} was: {}".format(
             str(enUser.PLAYER_ONE), self.gameScore["PLAYER_ONE"]))
-        print("The number of ties is:{}".format( str(self.gameScore["tie"]) ))
-        print("The number of times won by the {} was:{}".format(
+        displayManager.display("The number of ties is:{}".format( str(self.gameScore["tie"]) ))
+        displayManager.display("The number of times won by the {} was:{}".format(
             str(enUser.COMPUTER), self.gameScore["COMPUTER"]))
 
     def __boCheckHorRow(self, row: int):
@@ -175,24 +177,10 @@ class TicTacToe(IGame):
 
         return boReturn
 
-
-            # if (enBoardType.TIC_TAC_TOE == board.getType()):
-            #     for row in range(len(board)):
-            #         rowStr = ''
-            #         if (row > 0):
-            #             self.__sendDataToBuffer(5*'-')
-            #         for column in range(len(board[row])):
-            #             if(column > 0):
-            #                 rowStr += '|'
-            #             rowStr += str(board[row][column])
-            #         self.__sendDataToBuffer(rowStr)
-            # else:
-            #     raise Exception("Invlaid board type")
-
 if __name__ == '__main__':
     print('Wellcome to the TicTacToe game')
     game = TicTacToe()
-    for i in range(1):
+    for i in range(3):
         game.newGame()
         game.play()
 

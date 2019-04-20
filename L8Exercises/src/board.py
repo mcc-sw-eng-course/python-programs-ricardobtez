@@ -1,3 +1,6 @@
+# Author: Ricardo Arturo Benitez Cruz
+# Student number: A01018084
+# Program: Board class
 
 from enum import Enum, auto, IntEnum
 from copy import deepcopy
@@ -30,7 +33,6 @@ class Board:
     def resetBoard(self):
         if (True == self.ready):
             self.board = [[self.domain[0] for x in range(self.size)] for y in range(self.size)]
-        # print('Board:{}'.format(self.board))
 
     def getSize(self):
         return self.size
@@ -57,7 +59,6 @@ class Board:
 
         if (enBoardType.TIC_TAC_TOE == self.type):
             boReturn = True
-            # splitList = playerInput.split(' ')
             if (2 == len(playerInput)):
                 for element in playerInput:
                     if (False ==str(element).isdigit()):
@@ -70,7 +71,6 @@ class Board:
                 boReturn = False
 
             if (True == boReturn):
-                #print("Data in position{}:{}, empty:{}".format(playerInput, self.board[playerInput[0]][playerInput[1]], self.domain[0]))
                 if (self.board[playerInput[0]][playerInput[1]] != self.domain[0]):
                     boReturn = False
         return boReturn

@@ -1,3 +1,6 @@
+# Author: Ricardo Arturo Benitez Cruz
+# Student number: A01018084
+# Program: Player Manager class
 
 from enum import auto, IntEnum
 from random import randrange
@@ -16,18 +19,10 @@ class enUser(IntEnum):
 
 class PlayerMgr:
     def __init__(self, plyrsList:list, markers:list):
-        # self.playerList = []
-        # for element in plyrsList:
-        #     if (enUser.COMPUTER == element):
-        #         self.playerList.append(enUser.COMPUTER)
-        #     elif (enUser.PLAYER_ONE == element):
-        #         self.playerList.append(enUser.PLAYER_ONE)
-        #     elif(enUser.PLAYER_TWO == element):
-        #         self.playerList.append(enUser.PLAYER_TWO)
         self.playerList = deepcopy(plyrsList)
-        startRandUser = randrange(0, len(self.playerList)-1, 1)
-        self.currentPlayer = self.playerList[0]#self.playerList[startRandUser]
-        self.currenIndexPlayer = 0
+        startRandUser = randrange(0, len(self.playerList), 1)
+        self.currentPlayer = self.playerList[startRandUser]
+        self.currenIndexPlayer = startRandUser
         self.displayMgr = Display.getInstance()
         self.moves = {}
 
@@ -41,10 +36,7 @@ class PlayerMgr:
         if (enUser.COMPUTER == self.currentPlayer):
             move = self.__randCompMove(board.getSize())
         else:
-            # Setting up the data to send to Display Mgr
-
             if (enUser.PLAYER_ONE == self.currentPlayer):
-                #raise Exception("Not finished")
                 while(move == (-1, -1)):
                     self.displayMgr.display(str(board))
                     data = self.displayMgr.receiveInfo("Input the coordinates 'y x', eg. '0 2' or '2 2': ")
@@ -56,11 +48,11 @@ class PlayerMgr:
                             self.displayMgr.display("REALLY?! Try again")
                     else:
                         self.displayMgr.display("Wrong input.")
-
+            if (enUser.PLAYER_TWO == self.currentPlayer):
+                raise Exception("Not finished")
         return move
     def nextPlayer(self):
         self.currenIndexPlayer = ((self.currenIndexPlayer + 1) % len(self.playerList))
-        print("Index player:{}".format(self.currenIndexPlayer))
         self.currentPlayer = self.playerList[self.currenIndexPlayer]
     def getCurrentPlayer(self):
         return self.currentPlayer
@@ -70,11 +62,5 @@ class PlayerMgr:
     def __randCompMove(self, limit):
         randY = randrange(0,limit,1)
         randX = randrange(0,limit,1)
-        print("Random comp move:{},{}".format(randY, randX))
         return (randY, randX)
-
-if __name__ == '__main__':
-    plyr = PlayerMgr([enUser.COMPUTER, enUser.PLAYER_ONE], ['X','O'])
-    print(plyr.getCurrentPlayer())
-    print(plyr.getMarker())
-    move = plyr.getNextMove()
+        
