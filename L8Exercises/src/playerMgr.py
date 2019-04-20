@@ -5,7 +5,7 @@
 from enum import auto, IntEnum
 from random import randrange
 from display import *
-from board import Board
+from board import Board, enBoardType
 from copy import deepcopy
 
 class enUser(IntEnum):
@@ -34,22 +34,28 @@ class PlayerMgr:
     def getNextMove(self, board:Board):
         move = (-1,-1)
         if (enUser.COMPUTER == self.currentPlayer):
-            move = self.__randCompMove(board.getSize())
+            if (board.getType() == enBoardType.TIC_TAC_TOE):
+                move = self.__randCompMove(board.getSize())
+            else:
+                move = self.__randCheckersMove(board)
         else:
-            if (enUser.PLAYER_ONE == self.currentPlayer):
-                while(move == (-1, -1)):
-                    self.displayMgr.display(str(board))
-                    data = self.displayMgr.receiveInfo("Input the coordinates 'y x', eg. '0 2' or '2 2': ")
-                    dataList = data.split(" ")
-                    if (2==len(dataList)):
-                        if((dataList[0].isdigit()) and (dataList[1].isdigit())):
-                            move = (int(dataList[0]), int(dataList[1]))
+            if (board.getType() == enBoardType.TIC_TAC_TOE):
+                if (enUser.PLAYER_ONE == self.currentPlayer):
+                    while(move == (-1, -1)):
+                        self.displayMgr.display(str(board))
+                        data = self.displayMgr.receiveInfo("Input the coordinates 'y x', eg. '0 2' or '2 2': ")
+                        dataList = data.split(" ")
+                        if (2==len(dataList)):
+                            if((dataList[0].isdigit()) and (dataList[1].isdigit())):
+                                move = (int(dataList[0]), int(dataList[1]))
+                            else:
+                                self.displayMgr.display("REALLY?! Try again")
                         else:
-                            self.displayMgr.display("REALLY?! Try again")
-                    else:
-                        self.displayMgr.display("Wrong input.")
-            if (enUser.PLAYER_TWO == self.currentPlayer):
-                raise Exception("Not finished")
+                            self.displayMgr.display("Wrong input.")
+                if (enUser.PLAYER_TWO == self.currentPlayer):
+                    raise Exception("Not finished")
+            else:
+                pass
         return move
     def nextPlayer(self):
         self.currenIndexPlayer = ((self.currenIndexPlayer + 1) % len(self.playerList))
@@ -63,4 +69,19 @@ class PlayerMgr:
         randY = randrange(0,limit,1)
         randX = randrange(0,limit,1)
         return (randY, randX)
+    def __randCheckersMove(self, board: Board):
+        xReturn = None
+        whitesPosition = []
+        # Gets all the positions of the current Computer coins
+        for row in range(8):
+            for column in range(8):
+                cellData = board.getDomainInCell(row, column)
+                if (cellData == self.moves[enUser.COMPUTER]):
+                    whitesPosition.append([row,column])
+                    lowerRow = (row + 1) % 8
+                    # if (board[row][])
+
+        for i in whitesPosition:
+            print(i)
+        return xReturn
         
