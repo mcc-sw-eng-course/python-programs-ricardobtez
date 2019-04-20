@@ -7,6 +7,7 @@ from copy import deepcopy
 
 class enBoardType(Enum):
     TIC_TAC_TOE = auto()
+    CHECKERS = auto()
     INVALID_VALUE = auto()
 
 class Board:
@@ -77,18 +78,32 @@ class Board:
 
     def __str__(self):
         xReturn = ""
-        if (enBoardType.TIC_TAC_TOE == self.type):
-            for row in range(self.size):
-                rowStr = ''
-                if (row > 0):
-                    xReturn += 5*'-'
-                    xReturn += "\n"
-                for column in range(self.size):
-                    if(column > 0):
-                        rowStr += '|'
-                    rowStr += str(self.board[row][column])
-                xReturn += rowStr
-                xReturn += "\n"
-        else:
-            raise Exception("Invlaid board type")
+        
+        for row in range(self.size):
+            rowStr = ''
+            if (row > 0):
+                xReturn += self.__getRowSeparation()
+            for column in range(self.size):
+                rowStr += self.__getColumnSeparation(column)
+                rowStr += str(self.board[row][column])
+            xReturn += rowStr
+            xReturn += "\n"
         return xReturn
+    def __getRowSeparation(self):
+        xReturn = ''
+        if (enBoardType.TIC_TAC_TOE == self.type):
+            xReturn += 5*'-'
+            xReturn += "\n"
+        elif (enBoardType.CHECKERS == self.type):
+            xReturn += 16*'-'
+            xReturn += "\n"
+        return xReturn
+    def __getColumnSeparation(self, column):
+        rowStr = ''
+        if (enBoardType.TIC_TAC_TOE == self.type):
+            if(column > 0):
+                rowStr += '|'
+        elif (enBoardType.CHECKERS == self.type):
+            if(column > 0):
+                rowStr += '|'
+        return rowStr
