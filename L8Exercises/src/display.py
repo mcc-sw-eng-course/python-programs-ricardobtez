@@ -35,15 +35,9 @@ class Display:
             print(data)
         else:
             self.comSocket.send(data)
-            
-    def displayInfo(self, data:str, boLocal:bool = True):
-        if (True == boLocal):
-            print(data)
-        else:
-            print(data)
 
-    def receiveInfo(self, boLocal:bool = True):
-        pass
+    def receiveInfo(self, request:str="", boLocal:bool = True):
+        return input(request)
 
     # def __getUserInput(self, user: enUser):
     #     dataReturn = ""
@@ -53,15 +47,3 @@ class Display:
     #         dataReturn = input("Input the coordinates 'y x', eg. '1 2' or '2 2': ")
     #     return dataReturn
 
-    def __sendDataToBuffer(self, data):
-        if (True == self.boTwoPlayers):
-            # self.comSocket.send
-            print(data)
-        else:
-            print(data)
-
-if __name__ == '__main__':
-    d = Display.getInstance()
-    print(d)
-    e = Display.getInstance()
-    print(d)
