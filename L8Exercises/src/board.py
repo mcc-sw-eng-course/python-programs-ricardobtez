@@ -41,10 +41,9 @@ class Board:
     def boFillPosition(self, data, y:int, x:int):
         boReturn = False
         if ((data in self.domain) and (self.domain[0] != data)):
-            if (self.domain[0] == self.board[0][0]):
+            if (self.domain[0] == self.board[y][x]):
                 self.board[y][x] = data
                 boReturn = True
-        # print(self.board)
         return boReturn
     def getDomainInCell(self, y:int, x:int):
         xReturn = None
@@ -71,8 +70,25 @@ class Board:
                 boReturn = False
 
             if (True == boReturn):
-                position = [int(x) for x in playerInput]
-                # print(self.board)
-                if (self.board[position[0]][position[1]] != self.domain[0]):
+                #print("Data in position{}:{}, empty:{}".format(playerInput, self.board[playerInput[0]][playerInput[1]], self.domain[0]))
+                if (self.board[playerInput[0]][playerInput[1]] != self.domain[0]):
                     boReturn = False
         return boReturn
+
+    def __str__(self):
+        xReturn = ""
+        if (enBoardType.TIC_TAC_TOE == self.type):
+            for row in range(self.size):
+                rowStr = ''
+                if (row > 0):
+                    xReturn += 5*'-'
+                    xReturn += "\n"
+                for column in range(self.size):
+                    if(column > 0):
+                        rowStr += '|'
+                    rowStr += str(self.board[row][column])
+                xReturn += rowStr
+                xReturn += "\n"
+        else:
+            raise Exception("Invlaid board type")
+        return xReturn

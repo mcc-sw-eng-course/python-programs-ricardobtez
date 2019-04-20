@@ -192,7 +192,7 @@ class TicTacToe(IGame):
 if __name__ == '__main__':
     print('Wellcome to the TicTacToe game')
     game = TicTacToe()
-    for i in range(3):
+    for i in range(1):
         game.newGame()
         game.play()
 
