@@ -95,7 +95,7 @@ class Board:
             xReturn += 5*'-'
             xReturn += "\n"
         elif (enBoardType.CHECKERS == self.type):
-            xReturn += 16*'-'
+            xReturn += 21*'-'
             xReturn += "\n"
         return xReturn
     def __getColumnSeparation(self, column):

@@ -26,11 +26,11 @@ class PlayerMgr:
         self.displayMgr = Display.getInstance()
         self.moves = {}
 
-        if (len(plyrsList) == len(markers)):
-            for i in range(len(self.playerList)):
-                self.moves[self.playerList[i]] = markers[i]
-        else:
-            raise ValueError("Moves dont correspond to Players")
+        # if (len(plyrsList) == len(markers)):
+        for i in range(len(self.playerList)):
+            self.moves[self.playerList[i]] = markers[i]
+        # else:
+        #     raise ValueError("Moves dont correspond to Players")
     def getNextMove(self, board:Board):
         move = (-1,-1)
         if (enUser.COMPUTER == self.currentPlayer):
@@ -71,17 +71,42 @@ class PlayerMgr:
         return (randY, randX)
     def __randCheckersMove(self, board: Board):
         xReturn = None
-        whitesPosition = []
+        whitesPosition = self.__getPlayersPieces(board, enUser.COMPUTER)
+        redsPosition = self.__getPlayersPieces(board, enUser.PLAYER_ONE)
+        moves = self.__sortPlayersPieces(whitesPosition, redsPosition)
+        return xReturn
+
+    def __getPlayersPieces(self, board:Board, user:enUser):
+        aReturn = []
         # Gets all the positions of the current Computer coins
         for row in range(8):
             for column in range(8):
                 cellData = board.getDomainInCell(row, column)
-                if (cellData == self.moves[enUser.COMPUTER]):
-                    whitesPosition.append([row,column])
-                    lowerRow = (row + 1) % 8
-                    # if (board[row][])
+                if (cellData == self.moves[user]):
+                    aReturn.append([row,column])
+        return aReturn
 
-        for i in whitesPosition:
-            print(i)
-        return xReturn
-        
+    def __sortPlayersPieces(self,
+                            ownPlayerPositions: list,
+                            versusPLayerPositions: list,
+                            boDirection: bool=True):
+        sortedList = []
+        for position in ownPlayerPositions:
+            pass
+
+    def __getAllMovesPosition(self, board: Board, position):
+        value = board.getDomainInCell(position[0], position[1])
+        xAllMoves = []
+        if (enChecker.RED == value):
+
+            if (enChecker.EMPTY == board.getDomainInCell((position[0]-1) % 8,
+                                                         (position[1]-1) % 8)):
+                xAllMoves.append([(position[0]-1) % 8,(position[1]-1) % 8])
+            # if (enChecker.WHITE == board.getDomainInCell((position[0]-1) % 8,
+            #                                              (position[1]-1) % 8)):
+            #     xAllMoves.append(self.__getAllMovesPosition(board, [position[0]]))
+            # if (enChecker.EMPTY == board.getDomainInCell((position[0]-1) % 8,
+            #                                              (position[1]+1) % 8)):
+        # if ((value == enChecker.RED_KING) or (value == enChecker.WHITE_KING)):
+
+        return xAllMoves

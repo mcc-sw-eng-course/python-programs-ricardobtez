@@ -13,13 +13,21 @@ class enChecker(IntEnum):
     EMPTY = auto()
     RED = auto()
     WHITE = auto()
+    RED_KING = auto()
+    WHITE_KING = auto()
 
     def __str__(self):
         returnValue = ' '
         if (enChecker.RED == self.value):
-            returnValue = 'R'
+            returnValue = 'R '
+        elif (enChecker.RED_KING == self.value):
+            returnValue = 'RK'
         elif (enChecker.WHITE == self.value):
-            returnValue = 'W'
+            returnValue = 'W '
+        elif (enChecker.WHITE_KING == self.value):
+            returnValue = 'WK'
+        else:
+            returnValue = '  '
         return returnValue
 
 class Checkers(IGame):
@@ -27,7 +35,10 @@ class Checkers(IGame):
         self.boTwoPlayers = boTwoPlayers
         self.displayMgr = Display.getInstance()
         self.board = Board()
-        self.board.setBoardInfo(8, [enChecker.EMPTY, enChecker.RED, enChecker.WHITE], enBoardType.CHECKERS)
+        domain = [enChecker.EMPTY, enChecker.RED, enChecker.WHITE, enChecker.RED_KING, enChecker.WHITE_KING]
+        self.board.setBoardInfo(8,
+            domain,
+            enBoardType.CHECKERS)
         self.gameScore = {
             "PLAYER_ONE": 0,
             "COMPUTER": 0,
@@ -38,7 +49,7 @@ class Checkers(IGame):
             playerList = [enUser.PLAYER_ONE, enUser.PLAYER_TWO]
         else:
             playerList = [enUser.COMPUTER, enUser.PLAYER_ONE]
-        self.playerMgr = PlayerMgr(playerList, [enChecker.WHITE, enChecker.RED])
+        self.playerMgr = PlayerMgr(playerList, domain)
 
     def newGame(self):
         self.board.resetBoard()
